@@ -15,65 +15,58 @@
 <script src="jquery.dataTables.min.js"></script>
 
 <script>
-    var data = [
-        [ "Trident", "Internet Explorer 4.0" ],
-        [ "Trident", "Internet Explorer 5.0" ],
-        [ "Trident", "Internet Explorer 5.5" ],
-        [ "Trident", "Internet Explorer 6.0" ],
-        [ "Trident", "Internet Explorer 7.0" ],
-        [ "Gecko", "Firefox 1.5" ],
-        [ "Gecko", "Firefox 2" ],
-        [ "Gecko", "Firefox 3" ],
-        [ "Webkit", "Safari 1.2" ],
-        [ "Webkit", "Safari 1.3" ],
-        [ "Webkit", "Safari 2.0" ],
-        [ "Webkit", "Safari 3.0" ]
-    ];
+    var meboss = {
+        refreshRanking: function(rankingPopupData) {
+            var myDataTable = $('#ranking').dataTable();
 
-    var dataTableOpts = {
-        "aaData": data,
-        "aoColumns": [
-            { "sTitle": "Name" },
-            { "sTitle": "Ranking" }
-        ],
-        "bPaginate": false,
-        "bLengthChange": false,
-        "bFilter": true,
-        "bSort": false,
-        "bInfo": false,
-        "bAutoWidth": false
+            myDataTable.fnClearTable();
+            myDataTable.fnAddData(rankingPopupData);
+        },
+
+        refreshApplicant: function(applicantPopupData) {
+            var myDataTable = $('#applicant').dataTable();
+
+            myDataTable.fnClearTable();
+            myDataTable.fnAddData(applicantPopupData);
+        }
     };
 
     $(document).ready(function() {
+        var dataTableOpts = {
+                "aoColumns": [
+                    { "sTitle": "Name" },
+                    { "sTitle": "Ranking" }
+                ],
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": true,
+                "bSort": false,
+                "bInfo": false,
+                "bAutoWidth": false
+        };
+
         $('#tabs').tabs();
         $(':button').button();
-        $('#ranking').dataTable(dataTableOpts);
+
+        var rankingTable = $('#ranking').dataTable(dataTableOpts);
+        var rankingData = JSON.parse(localStorage.getItem('RANKING'));
+        if (rankingData) {
+            rankingTable.fnAddData(rankingData);
+        }
+
         $('#applicant').dataTable(dataTableOpts);
 
         $('#rankingButton').click(function(tab) {
             console.log('Refresh button clicked on tab ...');
-            chrome.extension.getBackgroundPage().refreshRanking();
+            chrome.extension.getBackgroundPage().meboss.refreshRanking();
         });
 
         $('#applicantButton').click(function() {
             console.log('Set Ranking button clicked ...');
-            chrome.extension.getBackgroundPage().setApplicantRanking();
+            chrome.extension.getBackgroundPage().meboss.setApplicantRanking();
         });
     });
 
-    function refreshRanking(rankingPopupData) {
-        var myDataTable = $('#ranking').dataTable();
-
-        myDataTable.fnClearTable();
-        myDataTable.fnAddData(rankingPopupData);
-    }
-
-    function refreshApplicant(applicantPopupData) {
-        var myDataTable = $('#applicant').dataTable();
-
-        myDataTable.fnClearTable();
-        myDataTable.fnAddData(applicantPopupData);
-    }
 </script>
 
 
