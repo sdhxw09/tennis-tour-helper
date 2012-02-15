@@ -1,0 +1,21 @@
+{
+    "name": "Tennis Tournament Helper",
+    "version": "0.1",
+    "description": "Grab ranking infomation and add ranking to the applicant list",
+    "background_page": "background.html",
+    "page_action": {
+        "default_icon": "icon.png",
+        "popup": "popup.html"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["http://tennislink.usta.com/*"],
+            "js": ["jquery-1.7.1.min.js", "content.js"]
+        }
+    ],
+
+    "permissions": [
+        "tabs"
+    ]
+}

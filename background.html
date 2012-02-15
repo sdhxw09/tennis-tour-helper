@@ -1,0 +1,71 @@
+<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+
+<script>
+    var currentTabId;
+    var rankingData;
+    var applicantData;
+
+    chrome.tabs.onSelectionChanged.addListener(function (tabId) {
+        currentTabId = tabId;
+        chrome.tabs.get(tabId, function(tab) {
+            var tabUrl = tab.url;
+            console.log(tabUrl);
+            if (tabUrl.indexOf('http://tennislink.usta.com/') != -1) {
+                chrome.pageAction.show(currentTabId);
+            }
+        });
+    });
+
+    chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+        var option = request.option;
+        if (option === "RANKING") {
+            rankingData = request.data;
+            var rankingPopupData = [];
+            var keys = Object.keys(rankingData);
+            for (var i = 0; i < keys.length; i++) {
+                var key = keys[i];
+                var myRanking = [key, rankingData[key]];
+                rankingPopupData.push(myRanking);
+            }
+
+            chrome.extension.getViews({type: 'popup'})[0].refreshRanking(rankingPopupData);
+        }
+        else {
+            applicantData = request.data;
+            var  applicantPopupData = [];
+            for (var i = 0; i < applicantData.length; i++) {
+                var name = applicantData[i];
+                var myRanking = [name, findRanking(name)];
+                applicantPopupData.push(myRanking);
+            }
+
+            applicantPopupData.sort(function(a, b) {
+                return a[1] - b[1];
+            });
+
+            chrome.extension.getViews({type: 'popup'})[0].refreshApplicant(applicantPopupData);
+        }
+    });
+
+    function refreshRanking() {
+        chrome.tabs.sendRequest(currentTabId, {'option': 'RANKING'});
+    }
+
+    function setApplicantRanking() {
+        chrome.tabs.sendRequest(currentTabId, {'option': 'APPLICANT'});
+    }
+
+    function findRanking(name) {
+        var ranking = '';
+        var keys = Object.keys(rankingData);
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            if (key.indexOf(name) != -1) {
+                ranking = rankingData[key];
+            }
+        }
+
+        return ranking;
+    }
+
+</script>
