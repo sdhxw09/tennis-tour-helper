@@ -3,6 +3,7 @@
 <script>
     var meboss = {
         currentTabId: 0,
+        ageGroup: 'B14',
 
         addMessageListener: function() {
             chrome.tabs.onSelectionChanged.addListener(function (tabId) {
@@ -29,8 +30,8 @@
                         rankingPopupData.push(myRanking);
                     }
 
-                    meboss.saveRanking(rankingPopupData);
-                    chrome.extension.getViews({type: 'popup'})[0].meboss.refreshRanking(rankingPopupData);
+                    meboss.saveRanking(meboss.ageGroup, rankingPopupData);
+                    chrome.extension.getViews({type: 'popup'})[0].meboss.refreshRanking(meboss.ageGroup, rankingPopupData);
                 }
                 else {
                     var applicantData = request.data;
@@ -38,7 +39,7 @@
                     for (var i = 0; i < applicantData.length; i++) {
                         var name = applicantData[i];
 
-                        var playerInfo = meboss.findRanking(name);
+                        var playerInfo = meboss.findRanking('B14', name);
                         if (playerInfo.length != 0) {
                             applicantPopupData.push([name, playerInfo[0], playerInfo[1]]);
                         }
@@ -56,7 +57,13 @@
             });
         },
 
-        refreshRanking: function() {
+        refreshB14Ranking: function() {
+            meboss.ageGroup = 'B14';
+            chrome.tabs.sendRequest(meboss.currentTabId, {'option': 'RANKING'});
+        },
+
+        refreshB12Ranking: function() {
+            meboss.ageGroup = 'B12';
             chrome.tabs.sendRequest(meboss.currentTabId, {'option': 'RANKING'});
         },
 
@@ -64,15 +71,14 @@
             chrome.tabs.sendRequest(meboss.currentTabId, {'option': 'APPLICANT'});
         },
 
-        saveRanking: function(rankingPopupData) {
-            localStorage.clear();
-            localStorage.setItem('RANKING', JSON.stringify(rankingPopupData));
+        saveRanking: function(ageGroup, rankingPopupData) {
+            localStorage.setItem(ageGroup, JSON.stringify(rankingPopupData));
             localStorage.setItem('TIMESTAMP', Date.now());
         },
 
-        findRanking: function(name) {
+        findRanking: function(ageGroup, name) {
             var ranking = [];
-            var playerData = JSON.parse(localStorage.getItem('RANKING'));
+            var playerData = JSON.parse(localStorage.getItem(ageGroup));
             if (playerData) {
                 for (var i = 0; i < playerData.length; i++) {
                     var playerName = playerData[i][0];

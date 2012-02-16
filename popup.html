@@ -16,8 +16,11 @@
 
 <script>
     var meboss = {
-        refreshRanking: function(rankingPopupData) {
-            var myDataTable = $('#ranking').dataTable();
+        refreshRanking: function(ageGroup, rankingPopupData) {
+            var myDataTable = $('#rankingB14').dataTable();
+            if (ageGroup == 'B12') {
+                myDataTable = $('#rankingB12').dataTable();
+            }
 
             myDataTable.fnClearTable();
             myDataTable.fnAddData(rankingPopupData);
@@ -50,17 +53,28 @@
         $('#tabs').tabs();
         $(':button').button();
 
-        var rankingTable = $('#ranking').dataTable(dataTableOpts);
-        var playerData = JSON.parse(localStorage.getItem('RANKING'));
-        if (playerData) {
-            rankingTable.fnAddData(playerData);
+        var b14Table = $('#rankingB14').dataTable(dataTableOpts);
+        var b14Data = JSON.parse(localStorage.getItem('B14'));
+        if (b14Data) {
+            b14Table.fnAddData(b14Data);
+        }
+
+        var b12Table = $('#rankingB12').dataTable(dataTableOpts);
+        var b12Data = JSON.parse(localStorage.getItem('B12'));
+        if (b12Data) {
+            b12Table.fnAddData(b12Data);
         }
 
         $('#applicant').dataTable(dataTableOpts);
 
-        $('#rankingButton').click(function(tab) {
-            console.log('Refresh button clicked on tab ...');
-            chrome.extension.getBackgroundPage().meboss.refreshRanking();
+        $('#rankingB14Button').click(function(tab) {
+            console.log('Refresh button on B14 clicked on tab ...');
+            chrome.extension.getBackgroundPage().meboss.refreshB14Ranking();
+        });
+
+        $('#rankingB12Button').click(function(tab) {
+            console.log('Refresh button on B12 clicked on tab ...');
+            chrome.extension.getBackgroundPage().meboss.refreshB12Ranking();
         });
 
         $('#applicantButton').click(function() {
@@ -74,17 +88,29 @@
 
 <div id="tabs">
     <ul>
-        <li><a href="#tabs-1">Ranking</a></li>
-        <li><a href="#tabs-2">Applicants</a></li>
+        <li><a href="#tabs-1">B14 Ranking</a></li>
+        <li><a href="#tabs-2">B12 Ranking</a></li>
+        <li><a href="#tabs-3">Applicants</a></li>
     </ul>
     <div id="tabs-1">
-        <div id="demo">
-            <table cellpadding="0" cellspacing="0" border="0" class="display" id="ranking"></table>
+        <div>
+            <table cellpadding="0" cellspacing="0" border="0" class="display" id="rankingB14"></table>
         </div>
-        <div align="right"><button id="rankingButton">Refresh</button></div>
+        <div align="right">
+            <button id="rankingB14Button">Refresh</button>
+        </div>
     </div>
 
     <div id="tabs-2">
+        <div>
+            <table cellpadding="0" cellspacing="0" border="0" class="display" id="rankingB12"></table>
+        </div>
+        <div align="right">
+            <button id="rankingB12Button">Refresh</button>
+        </div>
+    </div>
+
+    <div id="tabs-3">
         <div>
             <table cellpadding="0" cellspacing="0" border="0" class="display" id="applicant"></table>
         </div>
