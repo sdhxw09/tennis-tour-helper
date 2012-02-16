@@ -17,9 +17,9 @@
 <script>
     var meboss = {
         refreshRanking: function(ageGroup, rankingPopupData) {
-            var myDataTable = $('#rankingB14').dataTable();
-            if (ageGroup == 'B12') {
-                myDataTable = $('#rankingB12').dataTable();
+            var myDataTable = $('#currentRanking').dataTable();
+            if (ageGroup == 'L') {
+                myDataTable = $('#lowerGroupRranking').dataTable();
             }
 
             myDataTable.fnClearTable();
@@ -35,7 +35,7 @@
     };
 
     $(document).ready(function() {
-        var dataTableOpts = {
+        var rankingTableOpt = {
                 "aoColumns": [
                     { "sTitle": "Name" },
                     { "sTitle": "Ranking" },
@@ -50,31 +50,47 @@
                 "bAutoWidth": false
         };
 
+        var applicantTableOpt = {
+            "aoColumns": [
+                { "sTitle": "Name" },
+                { "sTitle": "B14 Ranking" },
+                { "sTitle": "B12 Ranking" },
+                { "sTitle": "State" }
+            ],
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bSort": false,
+            "bInfo": false,
+            "bJQueryUI": true,
+            "bAutoWidth": false
+        };
+
         $('#tabs').tabs();
         $(':button').button();
 
-        var b14Table = $('#rankingB14').dataTable(dataTableOpts);
-        var b14Data = JSON.parse(localStorage.getItem('B14'));
-        if (b14Data) {
-            b14Table.fnAddData(b14Data);
+        var currentTable = $('#currentRanking').dataTable(rankingTableOpt);
+        var currentData = JSON.parse(localStorage.getItem('C'));
+        if (currentData) {
+            currentTable.fnAddData(currentData);
         }
 
-        var b12Table = $('#rankingB12').dataTable(dataTableOpts);
-        var b12Data = JSON.parse(localStorage.getItem('B12'));
-        if (b12Data) {
-            b12Table.fnAddData(b12Data);
+        var lowerTable = $('#lowerGroupRranking').dataTable(rankingTableOpt);
+        var lowerData = JSON.parse(localStorage.getItem('L'));
+        if (lowerData) {
+            lowerTable.fnAddData(lowerData);
         }
 
-        $('#applicant').dataTable(dataTableOpts);
+        $('#applicant').dataTable(applicantTableOpt);
 
-        $('#rankingB14Button').click(function(tab) {
+        $('#currentRankingButton').click(function(tab) {
             console.log('Refresh button on B14 clicked on tab ...');
-            chrome.extension.getBackgroundPage().meboss.refreshB14Ranking();
+            chrome.extension.getBackgroundPage().meboss.refreshCurrentRanking();
         });
 
-        $('#rankingB12Button').click(function(tab) {
+        $('#lowerRankingButton').click(function(tab) {
             console.log('Refresh button on B12 clicked on tab ...');
-            chrome.extension.getBackgroundPage().meboss.refreshB12Ranking();
+            chrome.extension.getBackgroundPage().meboss.refreshLowerGroupRanking();
         });
 
         $('#applicantButton').click(function() {
@@ -88,29 +104,29 @@
 
 <div id="tabs">
     <ul>
-        <li><a href="#tabs-1">B14 Ranking</a></li>
-        <li><a href="#tabs-2">B12 Ranking</a></li>
-        <li><a href="#tabs-3">Applicants</a></li>
+        <li><a href="#tabs-1">Applicants</a></li>
+        <li><a href="#tabs-2">B14 Ranking</a></li>
+        <li><a href="#tabs-3">B12 Ranking</a></li>
     </ul>
-    <div id="tabs-1">
-        <div>
-            <table cellpadding="0" cellspacing="0" border="0" class="display" id="rankingB14"></table>
-        </div>
-        <div align="right">
-            <button id="rankingB14Button">Refresh</button>
-        </div>
-    </div>
-
     <div id="tabs-2">
         <div>
-            <table cellpadding="0" cellspacing="0" border="0" class="display" id="rankingB12"></table>
+            <table cellpadding="0" cellspacing="0" border="0" class="display" id="currentRanking"></table>
         </div>
         <div align="right">
-            <button id="rankingB12Button">Refresh</button>
+            <button id="currentRankingButton">Refresh</button>
         </div>
     </div>
 
     <div id="tabs-3">
+        <div>
+            <table cellpadding="0" cellspacing="0" border="0" class="display" id="lowerGroupRranking"></table>
+        </div>
+        <div align="right">
+            <button id="lowerRankingButton">Refresh</button>
+        </div>
+    </div>
+
+    <div id="tabs-1">
         <div>
             <table cellpadding="0" cellspacing="0" border="0" class="display" id="applicant"></table>
         </div>

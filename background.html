@@ -3,7 +3,7 @@
 <script>
     var meboss = {
         currentTabId: 0,
-        ageGroup: 'B14',
+        ageGroup: 'C',
 
         addMessageListener: function() {
             chrome.tabs.onSelectionChanged.addListener(function (tabId) {
@@ -39,13 +39,21 @@
                     for (var i = 0; i < applicantData.length; i++) {
                         var name = applicantData[i];
 
-                        var playerInfo = meboss.findRanking('B14', name);
-                        if (playerInfo.length != 0) {
-                            applicantPopupData.push([name, playerInfo[0], playerInfo[1]]);
+                        var currentRanking = '';
+                        var lowerGroupRanking = '';
+                        var state = '';
+                        var currentInfo = meboss.findRanking('C', name);
+                        if (currentInfo.length != 0) {
+                            currentRanking = currentInfo[0];
+                            state = currentInfo[1];
                         }
-                        else {
-                            applicantPopupData.push([name, '', '']);
+
+                        var lowerGroupInfo = meboss.findRanking('L', name);
+                        if (lowerGroupInfo.length != 0) {
+                            lowerGroupRanking = lowerGroupInfo[0];
                         }
+
+                        applicantPopupData.push([name, currentRanking, lowerGroupRanking, state]);
                     }
 
                     applicantPopupData.sort(function(a, b) {
@@ -57,13 +65,13 @@
             });
         },
 
-        refreshB14Ranking: function() {
-            meboss.ageGroup = 'B14';
+        refreshCurrentRanking: function() {
+            meboss.ageGroup = 'C';  //Current age group
             chrome.tabs.sendRequest(meboss.currentTabId, {'option': 'RANKING'});
         },
 
-        refreshB12Ranking: function() {
-            meboss.ageGroup = 'B12';
+        refreshLowerGroupRanking: function() {
+            meboss.ageGroup = 'L';  //Lower age group
             chrome.tabs.sendRequest(meboss.currentTabId, {'option': 'RANKING'});
         },
 
