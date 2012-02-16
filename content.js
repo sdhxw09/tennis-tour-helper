@@ -5,7 +5,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if (option === "RANKING") {
         var data = {};
         var trElements = document.all.tags('tbody')[1].childNodes;
-        for (var i = 1; i < 201; i++) {
+        for (var i = 1; i < 501; i++) {
             var ranking = trElements[i].firstElementChild.firstElementChild.firstChild.nodeValue;
             var name = trElements[i].firstElementChild.nextSibling.firstElementChild.firstChild.nodeValue;
             data[name.trim()] = ranking;
