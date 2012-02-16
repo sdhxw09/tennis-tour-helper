@@ -35,13 +35,15 @@
         var dataTableOpts = {
                 "aoColumns": [
                     { "sTitle": "Name" },
-                    { "sTitle": "Ranking" }
+                    { "sTitle": "Ranking" },
+                    { "sTitle": "State" }
                 ],
                 "bPaginate": false,
                 "bLengthChange": false,
                 "bFilter": true,
                 "bSort": false,
                 "bInfo": false,
+                "bJQueryUI": true,
                 "bAutoWidth": false
         };
 
@@ -49,9 +51,9 @@
         $(':button').button();
 
         var rankingTable = $('#ranking').dataTable(dataTableOpts);
-        var rankingData = JSON.parse(localStorage.getItem('RANKING'));
-        if (rankingData) {
-            rankingTable.fnAddData(rankingData);
+        var playerData = JSON.parse(localStorage.getItem('RANKING'));
+        if (playerData) {
+            rankingTable.fnAddData(playerData);
         }
 
         $('#applicant').dataTable(dataTableOpts);

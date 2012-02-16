@@ -19,13 +19,13 @@
             chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
                 var option = request.option;
                 if (option === "RANKING") {
-                    var rankingData = request.data;
+                    var playerData = request.data;
 
                     var rankingPopupData = [];
-                    var keys = Object.keys(rankingData);
-                    for (var i = 0; i < keys.length; i++) {
-                        var key = keys[i];
-                        var myRanking = [key, rankingData[key]];
+                    var names = Object.keys(playerData);
+                    for (var i = 0; i < names.length; i++) {
+                        var name = names[i];
+                        var myRanking = [name, playerData[name][0], playerData[name][1]];   //[name, ranking, state]
                         rankingPopupData.push(myRanking);
                     }
 
@@ -37,8 +37,14 @@
                     var  applicantPopupData = [];
                     for (var i = 0; i < applicantData.length; i++) {
                         var name = applicantData[i];
-                        var myRanking = [name, meboss.findRanking(name)];
-                        applicantPopupData.push(myRanking);
+
+                        var playerInfo = meboss.findRanking(name);
+                        if (playerInfo.length != 0) {
+                            applicantPopupData.push([name, playerInfo[0], playerInfo[1]]);
+                        }
+                        else {
+                            applicantPopupData.push([name, '', '']);
+                        }
                     }
 
                     applicantPopupData.sort(function(a, b) {
@@ -65,13 +71,13 @@
         },
 
         findRanking: function(name) {
-            var ranking = '';
-            var rankingData = JSON.parse(localStorage.getItem('RANKING'));
-            if (rankingData) {
-                for (var i = 0; i < rankingData.length; i++) {
-                    var playerName = rankingData[i][0];
+            var ranking = [];
+            var playerData = JSON.parse(localStorage.getItem('RANKING'));
+            if (playerData) {
+                for (var i = 0; i < playerData.length; i++) {
+                    var playerName = playerData[i][0];
                     if (playerName.indexOf(name) != -1) {
-                        ranking = rankingData[i][1];
+                        ranking = [playerData[i][1], playerData[i][2]];
                         break;
                     }
                 }

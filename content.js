@@ -8,7 +8,10 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         for (var i = 1; i < 501; i++) {
             var ranking = trElements[i].firstElementChild.firstElementChild.firstChild.nodeValue;
             var name = trElements[i].firstElementChild.nextSibling.firstElementChild.firstChild.nodeValue;
-            data[name.trim()] = ranking;
+            var state = trElements[i].firstElementChild.nextSibling.nextSibling.nextSibling.firstElementChild.firstChild.nodeValue;
+
+            var personalInfo = [ranking, state];
+            data[name.trim()] = personalInfo;
         }
 
         chrome.extension.sendRequest({'option': option, 'data': data});
