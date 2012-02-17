@@ -56,10 +56,6 @@
                         applicantPopupData.push([name, currentRanking, lowerGroupRanking, state]);
                     }
 
-                    applicantPopupData.sort(function(a, b) {
-                        return a[1] - b[1];
-                    });
-
                     chrome.extension.getViews({type: 'popup'})[0].meboss.refreshApplicant(applicantPopupData);
                 }
             });

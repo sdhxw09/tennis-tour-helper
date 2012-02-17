@@ -1,7 +1,7 @@
 <style>
     body {
-        width:700px;
-        height: 400px;
+        width:750px;
+        height: 450px;
         overflow-x:hidden;
     }
 </style>
@@ -46,24 +46,25 @@
                 "bFilter": true,
                 "bSort": false,
                 "bInfo": false,
-                "bJQueryUI": true,
                 "bAutoWidth": false
         };
 
         var applicantTableOpt = {
             "aoColumns": [
                 { "sTitle": "Name" },
-                { "sTitle": "B14 Ranking" },
-                { "sTitle": "B12 Ranking" },
+                { "sTitle": "B14" },
+                { "sTitle": "B12" },
                 { "sTitle": "State" }
             ],
+            "aaSorting": [[1,'asc'], [2,'asc']],
             "bPaginate": false,
             "bLengthChange": false,
             "bFilter": true,
-            "bSort": false,
             "bInfo": false,
-            "bJQueryUI": true,
-            "bAutoWidth": false
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "sSwfPath": "/swf/copy_cvs_xls_pdf.swf"
+            }
         };
 
         $('#tabs').tabs();
