@@ -51,13 +51,25 @@
         };
 
         var applicantTableOpt = {
+            "fnDrawCallback": function (oSettings) {
+                /* Need to redo the counters if filtered or sorted */
+                if ( oSettings.bSorted || oSettings.bFiltered ) {
+                    for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ ) {
+                        $('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+                    }
+                }
+            },
             "aoColumns": [
+                { "sTitle": "" },
                 { "sTitle": "Name" },
                 { "sTitle": "B14" },
                 { "sTitle": "B12" },
                 { "sTitle": "State" }
             ],
-            "aaSorting": [[1,'asc'], [2,'asc']],
+            "aoColumnDefs": [
+                { "bSortable": false, "aTargets": [ 0 ] }
+            ],
+            "aaSorting": [[2,'asc'], [3,'asc']],
             "bPaginate": false,
             "bLengthChange": false,
             "bFilter": true,
