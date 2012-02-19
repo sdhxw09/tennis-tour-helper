@@ -39,7 +39,7 @@
                     for (var i = 0; i < applicantData.length; i++) {
                         var name = applicantData[i];
 
-                        var currentRanking = '';
+                        var currentRanking = '999';
                         var lowerGroupRanking = '';
                         var state = '';
                         var currentInfo = meboss.findRanking('C', name);
@@ -51,6 +51,9 @@
                         var lowerGroupInfo = meboss.findRanking('L', name);
                         if (lowerGroupInfo.length != 0) {
                             lowerGroupRanking = lowerGroupInfo[0];
+                            if (!state) {
+                                state = lowerGroupInfo[1];
+                            }
                         }
 
                         applicantPopupData.push([name, currentRanking, lowerGroupRanking, state]);
