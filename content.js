@@ -26,7 +26,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     }
     else {
         var data = [];
-        var aElements = $('#applicants a.cboxElement').each(function() {
+        var aElements = $('#applicants a.cboxElement');
+        if (aElements.length == 0) {
+            aElements = $('#competitors a');
+        }
+
+        aElements.each(function() {
             var name = this.text;
             data.push(name.trim());
         });
