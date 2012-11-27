@@ -12,7 +12,7 @@
 
     "content_scripts": [
         {
-            "matches": ["http://tennislink.usta.com/*"],
+            "matches": ["http://tennislink.usta.com/*", "https://tennislink.usta.com/*"],
             "js": ["jquery-1.7.1.min.js", "content.js"]
         }
     ],

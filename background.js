@@ -8,7 +8,7 @@ var meboss = {
             chrome.tabs.get(tabId, function(tab) {
                 var tabUrl = tab.url;
                 console.log(tabUrl);
-                if (tabUrl.indexOf('http://tennislink.usta.com/') != -1) {
+                if (tabUrl.indexOf('tennislink.usta.com/') != -1) {
                     chrome.pageAction.show(meboss.currentTabId);
                 }
             });
