@@ -12,39 +12,42 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="popup.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/popup.js"></script>
 
 
 <div id="tabs">
     <ul>
         <li><a href="#tabs-1">Applicants</a></li>
-        <li><a href="#tabs-2">B14 Ranking</a></li>
-        <li><a href="#tabs-3">B12 Ranking</a></li>
+        <li><a href="#tabs-2">Ranking</a></li>
     </ul>
-    <div id="tabs-2">
-        <div>
-            <table cellpadding="0" cellspacing="0" border="0" class="display" id="currentRanking"></table>
-        </div>
-        <div align="right">
-            <button id="currentRankingButton">Refresh</button>
-        </div>
-    </div>
-
-    <div id="tabs-3">
-        <div>
-            <table cellpadding="0" cellspacing="0" border="0" class="display" id="lowerGroupRranking"></table>
-        </div>
-        <div align="right">
-            <button id="lowerRankingButton">Refresh</button>
-        </div>
-    </div>
 
     <div id="tabs-1">
+        <div>
+            <select id="section">
+                <option value="NC">NC</option>
+                <option value="STA">Southern</option>
+            </select>
+            <button id="applicantButton">Set Ranking</button>
+        </div>
         <div>
             <table cellpadding="0" cellspacing="0" border="0" class="display" id="applicant"></table>
         </div>
         <div align="left" id="totalRecord">0</div>
-        <div align="right"><button id="applicantButton">Set Ranking</button></div>
+    </div>
+
+    <div id="tabs-2">
+        <div>
+            <select id="ageGroup">
+                <option value="NC_CURRENT">NC B16</option>
+                <option value="NC_LOWER">NC B14</option>
+                <option value="STA_CURRENT">Southern B16</option>
+                <option value="STA_LOWER">Southern B14</option>
+            </select>
+            <button id="rankingButton">Refresh</button>
+        </div>
+        <div>
+            <table cellpadding="0" cellspacing="0" border="0" class="display" id="ranking"></table>
+        </div>
     </div>
 </div>

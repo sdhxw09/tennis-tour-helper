@@ -1,6 +1,7 @@
 var meboss = {
     currentTabId: 0,
-    ageGroup: 'C',
+    ageGroup: 'NC_CURRENT',
+    section: 'NC',
 
     addMessageListener: function() {
         chrome.tabs.onSelectionChanged.addListener(function (tabId) {
@@ -14,8 +15,10 @@ var meboss = {
             });
         });
 
-        chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+        chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
             var option = request.option;
+            console.log('background script gets message on ' + option);
+
             if (option === "RANKING") {
                 var playerData = request.data;
 
@@ -28,24 +31,32 @@ var meboss = {
                 }
 
                 meboss.saveRanking(meboss.ageGroup, rankingPopupData);
-                chrome.extension.getViews({type: 'popup'})[0].meboss.refreshRanking(meboss.ageGroup, rankingPopupData);
+                chrome.extension.getViews({type: 'popup'})[0].meboss.refreshRanking(rankingPopupData);
             }
             else {
+                var currentAgeGroupName = 'NC_CURRENT';
+                var lowerAgeGroupName = 'NC_LOWER';
+                if (meboss.section == 'STA') {
+                    currentAgeGroupName = 'STA_CURRENT';
+                    lowerAgeGroupName = 'STA_LOWER';
+                }
+
                 var applicantData = request.data;
+                var names = Object.keys(applicantData);
                 var  applicantPopupData = [];
-                for (var i = 0; i < applicantData.length; i++) {
-                    var name = applicantData[i];
+                for (var i = 0; i < names.length; i++) {
+                    var name = names[i];
 
                     var currentRanking = '999';
                     var lowerGroupRanking = '';
                     var state = '';
-                    var currentInfo = meboss.findRanking('C', name);
+                    var currentInfo = meboss.findRanking(currentAgeGroupName, name);
                     if (currentInfo.length != 0) {
                         currentRanking = currentInfo[0];
                         state = currentInfo[1];
                     }
 
-                    var lowerGroupInfo = meboss.findRanking('L', name);
+                    var lowerGroupInfo = meboss.findRanking(lowerAgeGroupName, name);
                     if (lowerGroupInfo.length != 0) {
                         lowerGroupRanking = lowerGroupInfo[0];
                         if (!state) {
@@ -61,18 +72,16 @@ var meboss = {
         });
     },
 
-    refreshCurrentRanking: function() {
-        meboss.ageGroup = 'C';  //Current age group
-        chrome.tabs.sendRequest(meboss.currentTabId, {'option': 'RANKING'});
+    refreshCurrentRanking: function(ageGroup) {
+        console.log('Refresh button on age group ' + ageGroup + ' clicked ...');
+        meboss.ageGroup = ageGroup;
+        chrome.tabs.sendMessage(meboss.currentTabId, {'option': 'RANKING'});
     },
 
-    refreshLowerGroupRanking: function() {
-        meboss.ageGroup = 'L';  //Lower age group
-        chrome.tabs.sendRequest(meboss.currentTabId, {'option': 'RANKING'});
-    },
-
-    setApplicantRanking: function() {
-        chrome.tabs.sendRequest(meboss.currentTabId, {'option': 'APPLICANT'});
+    setApplicantRanking: function(section) {
+        console.log('Set Ranking button clicked ...');
+        meboss.section = section;
+        chrome.tabs.sendMessage(meboss.currentTabId, {'option': 'APPLICANT'});
     },
 
     saveRanking: function(ageGroup, rankingPopupData) {
