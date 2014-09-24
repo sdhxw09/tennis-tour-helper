@@ -1,3 +1,6 @@
+9/23/2014 version 0.4
+- Advanced to B16 and B18.
+
 4/18/2013 version 0.3
 - Move "Refresh" button to top
 - Collect ranking 1 to 800

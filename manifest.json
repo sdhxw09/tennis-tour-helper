@@ -1,6 +1,6 @@
 {
     "name": "Tennis Tournament Helper",
-    "version": "0.3",
+    "version": "0.4",
     "description": "Grab ranking information and add ranking to the applicant list",
     "manifest_version": 2,
     "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",

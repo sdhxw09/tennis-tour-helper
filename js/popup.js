@@ -51,8 +51,8 @@ $(document).ready(function() {
         "aoColumns": [
             { "sTitle": "" },
             { "sTitle": "Name" },
+            { "sTitle": "B18" },
             { "sTitle": "B16" },
-            { "sTitle": "B14" },
             { "sTitle": "State" }
         ],
         "aoColumnDefs": [
